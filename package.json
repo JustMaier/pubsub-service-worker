@@ -1,0 +1,22 @@
+{
+  "name": "pubsub-service-worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --config-name dev --open",
+    "build": "webpack --config-name production"
+  },
+  "keywords": [],
+  "author": "Justin Maier <Just.Maier@gmail.com> (https://heyj.us)",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "dependencies": {
+    "ipfs": "^0.36.4",
+    "ipfs-postmsg-proxy": "^3.1.1"
+  }
+}
