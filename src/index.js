@@ -18,7 +18,7 @@ function onWorkerReady () {
 function addItem (data) {
   const item = document.createElement('li')
   item.innerText = JSON.stringify(data)
-  document.getElementById('out').append(item)
+  document.getElementById('out').prepend(item)
 }
 
 const msg = document.getElementById('msg')
