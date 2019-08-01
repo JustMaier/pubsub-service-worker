@@ -1,6 +1,5 @@
 /* global self, Response */
 
-import { createProxyServer } from 'ipfs-postmsg-proxy'
 import { Buffer } from 'ipfs'
 import * as node from './node'
 
@@ -33,26 +32,26 @@ self.addEventListener('install', (event) => {
 
 // Handle chat requests
 self.addEventListener('message', async ({ data }) => {
-  (await node.get()).pubsub.publish('chat', Buffer.from(data))
+  if (data === 'wake') {
+    getPreparedNode()
+    return
+  }
+  (await getPreparedNode()).pubsub.publish('chat', Buffer.from(data))
 })
 
 // Activate service worker
 self.addEventListener('activate', (event) => {
-  node.get().then((node) => {
-    ipfsNode = node
-    ipfsNode.pubsub.subscribe('chat', handleMessageReceived)
-    ipfsNode.pubsub.subscribe('chat:receipt', handleReceiptReceived)
-
-    ipfsNode.id().then(({ id }) => {
-      peerId = id
-    })
-  }).catch((err) => console.log(err))
-
+  getPreparedNode().catch((err) => console.log(err))
   event.waitUntil(self.clients.claim())
 })
 
-createProxyServer(() => ipfsNode, {
-  addListener: self.addEventListener && self.addEventListener.bind(self),
-  removeListener: self.removeEventListener && self.removeEventListener.bind(self),
-  postMessage
-})
+async function getPreparedNode () {
+  if (ipfsNode) return ipfsNode
+  ipfsNode = await node.get()
+  ipfsNode.pubsub.subscribe('chat', handleMessageReceived)
+  ipfsNode.pubsub.subscribe('chat:receipt', handleReceiptReceived)
+
+  ipfsNode.id().then(({ id }) => {
+    peerId = id
+  })
+}

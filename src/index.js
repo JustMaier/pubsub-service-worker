@@ -12,6 +12,7 @@ function onWorkerReady () {
   navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data && event.data.type) addItem(event.data)
   })
+  navigator.serviceWorker.controller.postMessage('wake')
 }
 
 function addItem (data) {
