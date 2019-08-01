@@ -33,7 +33,7 @@ self.addEventListener('install', (event) => {
 
 // Handle chat requests
 self.addEventListener('message', async ({ data }) => {
-  if (ipfsNode) ipfsNode.pubsub.publish('chat', Buffer.from(data))
+  (await node.get()).pubsub.publish('chat', Buffer.from(data))
 })
 
 // Activate service worker
